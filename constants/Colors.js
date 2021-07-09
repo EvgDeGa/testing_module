@@ -1,4 +1,5 @@
 export default {
+    placeholder: 'rgba(255, 255, 255, 0.7)',
     primary: '#7f71e7',
     primaryDark: '#695bd1',
     primaryLight: '#B4AEE8',
