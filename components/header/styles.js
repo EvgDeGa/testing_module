@@ -10,6 +10,6 @@ export default {
     image:{
         transform: [{ scale: 0.7 }],
         position: 'absolute',
-        bottom: '-7%',
+        bottom: '-1%',
     }
 };

@@ -1,32 +1,27 @@
 export default { 
-    background: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        height: '100%',
-    },
-
-  center:{
-    //backgroundColor: '#000809',
-    backgroundColor: '#fff',
-    height: '90%',
-    //flex: 1,
+  screen: {
+    flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: 24,
+    alignItems: 'center'
   },
 
-  header: {
-    position: 'absolute',
-    top: 0,
+  gradient: {
+    flex: 1
   },
+
+  SignUpContainer: {
+    width: '80%',
+    maxWidth: 400,
+    //maxHeight: 400,
+    padding: 20
+  },
+    
 
   text:{
     color: '#fff',
     fontFamily: 'Montserrat-bold',
     fontSize: 40,
-    marginTop: '-10%',
+    //marginTop: '-10%',
 
 
     marginBottom: 15,
@@ -35,55 +30,47 @@ export default {
   textinput:{
     fontSize: 14,
     fontFamily: 'Montserrat-bold',
-    color: 'white',
+    color: 'rgba(0, 0, 0, 0.5)',
 
-    height: 40,
-    width: 300,
+    backgroundColor: '#fff',
+
+
+    height: 50,
+    //width: '78%',
     marginTop: 20,    
-    paddingLeft: 7,
-    paddingRight: 7,
+    paddingLeft: 10,
+    paddingRight: 10,
 
-    borderColor: '#BBD2E5',
-    borderBottomWidth: 1,
-  },
-
-  enterButton:{    
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    width:290,
-    height: 40,
-    borderRadius: 13,
-    backgroundColor: '#1A618F',
-
-    marginTop: 30,
-    marginBottom: 30,
+    borderRadius: 7,
+    // borderColor: '#BBD2E5',
+    // borderBottomWidth: 1,
   },
 
   entertext:{
-    color: 'white',
+    color: '#000',
     fontFamily: 'Montserrat-bold',
     fontSize: 14,
+    marginLeft: 30, 
+    marginRight: 30, 
+    // borderWidth: 2,
+    borderColor: 'yellow',
   },
 
   ButtonContainer:{
     justifyContent: 'center',
     alignItems: 'center',
+
+    height: 50,
+    backgroundColor: 'rgba(187, 210, 229, 1)',
+    //width:'60%',
+    borderRadius: 15,
+    //borderWidth: 2,
+    borderColor: 'green',
   },
 
-  forgotpass:{
-    color: 'white',
-    fontFamily: 'Montserrat',
-    fontSize: 18,
-  },
-
-  SignUp:{
-    position: 'absolute',
-    bottom: 35
-    // justifyContent: 'center',
-    //alignItems: 'center',
-  },
-
- 
+  clickButton:{
+    marginTop: 35,
+    //width: 'auto',
+  }
 
 };

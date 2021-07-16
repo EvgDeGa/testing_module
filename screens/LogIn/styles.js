@@ -1,26 +1,22 @@
 export default { 
-    background: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        height: '100%',
+    screen: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
     },
 
-  center:{
-    //backgroundColor: '#000809',
-    backgroundColor: '#fff',
-    height: '90%',
-    //flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: 24,
-  },
+    gradient: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
 
-  header: {
-    position: 'absolute',
-    top: 0,
-  },
+    authContainer: {
+      width: '80%',
+      maxWidth: 400,
+      maxHeight: 400,
+      padding: 20
+    },
 
   text:{
     color: '#fff',
@@ -80,8 +76,6 @@ export default {
   SignUp:{
     position: 'absolute',
     bottom: 35
-    // justifyContent: 'center',
-    //alignItems: 'center',
   },
 
   SignUpText:{
@@ -89,15 +83,8 @@ export default {
 
     color: 'white',
     fontFamily: 'Montserrat-SemiBold',
-    fontSize: 26,
+    fontSize: 18,
   },
-
-  imageBottom:{
-    position: 'absolute',
-    height: 100,
-    width: 100,
-    bottom: 0
-  }
 
 };
 

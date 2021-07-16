@@ -1,14 +1,24 @@
-import React from 'react';
-import { Button, View, Text, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { Provider, useDispatch, useSelector } from 'react-redux';
 import { LogInScreen } from './screens/LogIn/LogInScreen';
 import { SingUpScreen } from './screens/SignUp/SignUpScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import {HeaderModule} from './components/header/header'
-
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Font from 'expo-font'
 import { useState } from 'react';
 import AppLoading from 'expo-app-loading'
+import { createStore, combineReducers } from "redux";
+import { userReducer } from "./store/reducers/user";
+import AppNavigator from './navigation/AppNavigator'
+
+const rootReducer = combineReducers({
+    users: userReducer
+})
+
+const store = createStore(rootReducer);
+
+
 
 async function loadApplication(){
   await Font.loadAsync({
@@ -18,7 +28,6 @@ async function loadApplication(){
   })
 };
 
-const Stack = createStackNavigator();
 
 
 export default function App() {
@@ -31,18 +40,16 @@ export default function App() {
         onFinish={() => setIsReady(true)}
         onError={console.warn}
       />
-      
     )
   }
 
+
   return (
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="LogIn" headerMode='none'>
-          <Stack.Screen name="SignUp" component={SingUpScreen} />
-          <Stack.Screen name="LogIn" component={LogInScreen} />
-          <Stack.Screen name="Header" component={HeaderModule} />
-        </Stack.Navigator>
-      </NavigationContainer>
+    <Provider store={store}>
+      
+        <AppNavigator/>
+     
+    </Provider>
   );
 }
 

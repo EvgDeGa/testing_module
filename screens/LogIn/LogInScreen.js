@@ -1,122 +1,182 @@
-import React from 'react';
-import { Button, View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
+import React, { useReducer, useCallback } from 'react';
+import { View, Text, TextInput, Image, TouchableOpacity, Alert,KeyboardAvoidingView } from 'react-native';
 import styles from './styles';
 import { LinearGradient } from 'expo-linear-gradient';
 import {HeaderModule} from '../../components/header/header'
+import { useSelector, useDispatch } from 'react-redux';
+import * as authActions from '../../store/actions/auth'
 
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
-const fetchTodos = async () => {
-    console.log('Fetch data')
-    try {
-      const response = await fetch(
-        'https://back.yourtar.ru/api/security/login',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            "mode": "formdata",
-            "formdata": [
-                {
-                    "key": "email",
-                    "value": "vmv@yourtar.ru",
-                    "type": "text"
-                },
-                {
-                    "key": "pass",
-                    "value": "thvfrTHVFR94",
-                    "type": "text"
-                }
-            ]
-        }),
-        }
-      )
-      const data = await response.json()
-      console.log('Fetch data', data)
-      //const todos = Object.keys(data).map(key => ({ ...data[key], id: key }))
-      //dispatch({ type: FETCH_TODOS, todos })
-    } catch (e) {
-      showError('Что-пошло не так...')
-      console.log(e)
+const formReducer = (state, action) => {
+  if (action.type === FORM_INPUT_UPDATE) {
+    const updatedValues = {
+      ...state.inputValues,
+      [action.input]: action.value
+    };
+    const updatedValidities = {
+      ...state.inputValidities,
+      [action.input]: action.isValid
+    };
+    let updatedFormIsValid = true;
+    for (const key in updatedValidities) {
+      updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
     }
+    return {
+      formIsValid: updatedFormIsValid,
+      inputValidities: updatedValidities,
+      inputValues: updatedValues
+    };
   }
-
-const url = 'https://back.yourtar.ru/api/security/login';
-const data = {
-    mode: "formdata",
-    formdata: [
-        {
-            key: "email",
-            value: "vmv@yourtar.ru",
-            type: "text"
-        },
-        {
-            key: "pass",
-            value: "thvfrTHVFR94",
-            type: "text"
-        }
-    ]
+  return state;
 };
 
-var fdata = new FormData();
-// fdata.append('email', {
-//     "value": "vmv@yourtar.ru", //This is how it works :)
-//     type: 'text'
-// });
-// fdata.append('pass', {
-//     "value": "thvfrTHVFR94.ru", //This is how it works :)
-//     type: 'text'
-// });
-
-fdata.append('email', 'vmv@yourtar.ru');
-fdata.append('pass','thvfrTHVFR94');
-
-
-const post = async () => {
-    console.log('Fetch data 2')
-    try {
-    const response = await fetch(url, {
-        method: 'POST', 
-        body: fdata,
-        headers: {
-        'Content-Type': 'application/json'
-        }
-    });
-    const json = await response.json();
-    console.log('Успех:', JSON.stringify(json));
-    } catch (e) {
-        console.error('Ошибка:', e);
-    }
-    
-}
-
 export const LogInScreen = ({navigation}) => {
+    // const urlLogin = 'https://back.yourtar.ru/api/security/login';
+    // var fdata = new FormData();
+
+    // const [email, setEmail] = useState('')
+    // const [pass, setPass] = useState('')
+    
+    
+
+    // const authUser = useSelector(state => state.users.authUser)
+    // console.log(authUser)
+    
+    // const enterHandler = () => {
+    //     console.log(pass)
+    //     console.log(email)
+    //     if((pass.trim())&&(email.trim())){
+    //         fdata.append('email',email);
+    //         fdata.append('pass',pass);
+    //         post()
+    //     }
+    //     else{
+    //         Alert.alert('Заполните оба поля!')
+    //     }
+    // }    
+
+    // const post = async () => {
+    //     try {
+    //     const response = await fetch(urlLogin, {
+    //         method: 'POST', 
+    //         body: fdata,
+    //         headers: {
+    //         'Content-Type': 'application/json'
+    //         }
+    //     });
+    //     const result = await response.json()
+    //     console.log(result)
+    //     Alert.alert(result.message)
+    //     } catch (e) {
+    //         console.error('Ошибка:', e);
+    //     }
+    // }
+
+    const dispatch = useDispatch();
+
+    const [formState, dispatchFormState] = useReducer(formReducer, {
+        inputValues: {
+          email: '',
+          password: ''
+        },
+        inputValidities: {
+          email: false,
+          password: false
+        },
+        formIsValid: false
+      });
+
+    const loginHandler = () => {
+        // dispatch(authActions.login(
+        //     formState.inputValues.email,
+        //     formState.inputValues.password
+        // )
+        // )
+    }
+
+    const inputChangeHandler = useCallback(
+        (inputIdentifier, inputValue, inputValidity) => {
+          dispatchFormState({
+            type: FORM_INPUT_UPDATE,
+            value: inputValue,
+            isValid: inputValidity,
+            input: inputIdentifier
+          });
+        },
+        [dispatchFormState]
+      );
+
     return (
-    <View>
-        <HeaderModule  style={styles.header}/>
-        <View style={styles.center}>
-        <LinearGradient
-            colors={['rgb(1,10,11)', 'rgb(14,23,46)']}
-            style={styles.background}
-        />
-        <Text style={styles.text}>Авторизация</Text>
-        <TextInput style={styles.textinput} autoCompleteType='username' textContentType='username' autoCorrect={false} clearButtonMode='always' placeholderTextColor='rgba(255, 255, 255, 0.7)' placeholder='Логин или e-mail'/>
-        <TextInput style={styles.textinput} autoCompleteType='password' textContentType='password' autoCorrect={false}  clearButtonMode='always' placeholderTextColor='rgba(255, 255, 255, 0.7)' placeholder='Пароль'/>
-        <View style={styles.ButtonContainer}>
-            <TouchableOpacity onPress={() => post()}>
-                <View style={styles.enterButton}>
-                    <Text style={styles.entertext}>Войти</Text>
+        <LinearGradient colors={['rgb(1,10,11)', 'rgb(14,23,46)']} style={styles.gradient}>            
+            <Image 
+                style={{  
+                    top: '-25%',
+                    position: 'absolute',
+                    //transform: [{ scale: 0.7 }],
+                    width: '100%',
+                    resizeMode: 'contain'
+                }}
+                source={require('../../assets/login1.png')}
+            />
+            <Image 
+                style={{  
+                    bottom: '-20%',
+                    position: 'absolute',
+                    //transform: [{ scale: 0.7 }],
+                    width: '100%',
+                    resizeMode: 'contain'
+                }}
+                source={require('../../assets/login2.png')}
+            />
+            <KeyboardAvoidingView
+            behavior="padding"
+            keyboardVerticalOffset={50}
+            style={styles.screen}
+        >
+            <View style={styles.authContainer}>
+                <Text style={styles.text}>Авторизация</Text>
+                <TextInput 
+                    style={styles.textinput}
+                    //onChangeText={text => setEmail(text)}
+                    keyboardType="email-address"
+                    required
+                    email
+                    autoCapitalize="none"
+                    errorText="Please enter a valid email address."
+                    onInputChange={inputChangeHandler}
+                    placeholderTextColor='rgba(255, 255, 255, 0.7)' 
+                    placeholder='Логин или e-mail'/>
+                <TextInput 
+                    style={styles.textinput} 
+                    //onChangeText={text => setPass(text)}
+                    keyboardType="default"
+                    secureTextEntry
+                    required
+                    minLength={5}
+                    autoCapitalize="none"
+                    errorText="Please enter a valid password."
+                    onInputChange={inputChangeHandler}
+                    placeholderTextColor='rgba(255, 255, 255, 0.7)' 
+                    placeholder='Пароль'/>
+                <View style={styles.ButtonContainer}>
+                    <TouchableOpacity onPress={() => loginHandler()}>
+                        <View style={styles.enterButton}>
+                            <Text style={styles.entertext}>Вохд</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {console.log('Пароль')}}>
+                        <Text style={styles.forgotpass}>Забыли пароль?</Text>
+                    </TouchableOpacity>
                 </View>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => {console.log('Пароль')}}>
-                <Text style={styles.forgotpass}>Забыли пароль?</Text>
-            </TouchableOpacity>
-        </View>
-        <View style={styles.SignUp} >
-            <TouchableOpacity onPress={()=> navigation.navigate('SignUp')}>
-                <Text style={styles.SignUpText}>Нет аккаунта?{"\n"}Зарегестрируйтесь!</Text>
-            </TouchableOpacity>
-        </View>
-        </View>
-    </View>
+                
+            </View>
+            <View style={styles.SignUp} >
+                <TouchableOpacity onPress={()=> navigation.navigate('SignUp')}>
+                    <Text style={styles.SignUpText}>Нет аккаунта?{"\n"}Зарегестрируйтесь!</Text>
+                </TouchableOpacity>
+            </View>
+            </KeyboardAvoidingView>
+        </LinearGradient>
     )
 }
