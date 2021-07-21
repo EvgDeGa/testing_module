@@ -1,24 +1,18 @@
 import React, { useEffect } from 'react';
 import { Provider, useDispatch, useSelector } from 'react-redux';
-import { LogInScreen } from './screens/LogIn/LogInScreen';
-import { SingUpScreen } from './screens/SignUp/SignUpScreen';
-import { NavigationContainer } from '@react-navigation/native';
-import {HeaderModule} from './components/header/header'
-import { createStackNavigator } from '@react-navigation/stack';
 import * as Font from 'expo-font'
 import { useState } from 'react';
 import AppLoading from 'expo-app-loading'
-import { createStore, combineReducers } from "redux";
-import { userReducer } from "./store/reducers/user";
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import AppNavigator from './navigation/AppNavigator'
+import ReduxThunk from 'redux-thunk';
+import authReducer from './store/reducers/auth'
 
 const rootReducer = combineReducers({
-    users: userReducer
+  auth: authReducer
 })
 
-const store = createStore(rootReducer);
-
-
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 async function loadApplication(){
   await Font.loadAsync({

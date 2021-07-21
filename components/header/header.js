@@ -1,7 +1,6 @@
 import React from 'react';
-import { Button, View, Text, TextInput, Image, TouchableOpacity } from 'react-native';
+import {View, Image  } from 'react-native';
 import styles from './styles';
-import { LinearGradient } from 'expo-linear-gradient';
 
 
 export const HeaderModule = ({}) => {

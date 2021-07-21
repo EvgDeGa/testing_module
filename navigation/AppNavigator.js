@@ -1,63 +1,21 @@
 import React from 'react'
-import { Button, View, Text, TextInput, Image, TouchableOpacity, Alert } from 'react-native';
+import { useSelector } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native' 
-import { createStackNavigator } from '@react-navigation/stack' 
 
-
-import { LogInScreen } from '../screens/LogIn/LogInScreen';
-import { SingUpScreen } from '../screens/SignUp/SignUpScreen';
-import { HeaderModule } from '../components/header/header'
-import { MainScreen } from '../screens/MainScreen/MainScreen';
-
-function LogoTitle() {
-    return (
-      <Image
-        style={{  
-            transform: [{ scale: 0.7 }],
-            resizeMode: 'contain'
-        }}
-        source={require('../assets/Logo.png')}
-      />
-    );
-  }
-
-const MyStack = createStackNavigator();
+import { MainNavigator, AuthNavigator } from './StartNavigator';
+import StartScreen from '../screens/StartScreen/StartScreen'
 
 const AppNavigator = props => {
-
-    return <NavigationContainer>
-        <MyStack.Navigator initialRouteName="LogIn" >
-            <MyStack.Screen 
-                name="LogIn" 
-                component={LogInScreen} 
-                options={{ 
-                    headerTitle:  <LogoTitle/>,
-                   // headerLeft: null,
-                    headerBackImage: LogoTitle()
-                    }}/>
-            <MyStack.Screen 
-                name="SignUp" 
-                component={SingUpScreen} 
-                options={{ 
-                    headerTitle:  <LogoTitle/>,
-                    headerLeft: null 
-                    }}/>
-            <MyStack.Screen 
-                name="Header" 
-                component={HeaderModule}
-                options={{ 
-                    headerTitle: <LogoTitle/> ,
-                    // headerLeft: null
-                    }}/>
-            <MyStack.Screen 
-                name="Main" 
-                component={MainScreen}
-                options={{ 
-                    headerTitle: <LogoTitle/>,
-                    // headerLeft: null 
-                    }}/>
-        </MyStack.Navigator>
-    </NavigationContainer>
-}
+    const isAuth = useSelector(state => !!state.auth.token);
+    const didTryAutoLogin = useSelector(state => state.auth.didTryAutoLogin);
+ 
+    return (
+      <NavigationContainer>
+        {isAuth && <MainNavigator />}
+        {!isAuth && didTryAutoLogin && <AuthNavigator />}
+        {!isAuth && !didTryAutoLogin && <StartScreen />}
+      </NavigationContainer>
+    );
+  };
 
 export default AppNavigator;
